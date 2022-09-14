@@ -18,7 +18,7 @@ This environment is part of the <a href='..'>Mujoco environments</a>. Please rea
 | Observation Shape | (11,) |
 | Observation High | [inf inf inf inf inf inf inf inf inf inf inf] |
 | Observation Low | [-inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf] |
-| Import | `gymnasium.make("Hopper-v4")` | 
+| Import | `gym.make("Hopper-v4")` | 
 
 
 ### Description
@@ -114,13 +114,13 @@ If `terminate_when_unhealthy=False` is passed, the episode is ended only when 10
 No additional arguments are currently supported in v2 and lower.
 
 ```
-env = gymnasium.make('Hopper-v2')
+env = gym.make('Hopper-v2')
 ```
 
-v3 and v4 take gymnasium.make kwargs such as xml_file, ctrl_cost_weight, reset_noise_scale etc.
+v3 and v4 take gym.make kwargs such as xml_file, ctrl_cost_weight, reset_noise_scale etc.
 
 ```
-env = gymnasium.make('Hopper-v4', ctrl_cost_weight=0.1, ....)
+env = gym.make('Hopper-v4', ctrl_cost_weight=0.1, ....)
 ```
 
 | Parameter                                    | Type      | Default               | Description                                                                                                                                                                     |
@@ -139,7 +139,7 @@ env = gymnasium.make('Hopper-v4', ctrl_cost_weight=0.1, ....)
 ### Version History
 
 * v4: all mujoco environments now use the mujoco bindings in mujoco>=2.1.3
-* v3: support for gymnasium.make kwargs such as xml_file, ctrl_cost_weight, reset_noise_scale etc. rgb rendering comes from tracking camera (so agent does not run away from screen)
+* v3: support for gym.make kwargs such as xml_file, ctrl_cost_weight, reset_noise_scale etc. rgb rendering comes from tracking camera (so agent does not run away from screen)
 * v2: All continuous control environments now use mujoco_py >= 1.50
 * v1: max_time_steps raised to 1000 for robot based tasks. Added reward_threshold to environments.
 * v0: Initial versions release (1.0.0)

@@ -18,7 +18,7 @@ This environment is part of the <a href='..'>Mujoco environments</a>. Please rea
 | Observation Shape | (11,) |
 | Observation High | [inf inf inf inf inf inf inf inf inf inf inf] |
 | Observation Low | [-inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf] |
-| Import | `gymnasium.make("Reacher-v4")` | 
+| Import | `gym.make("Reacher-v4")` | 
 
 
 ### Description
@@ -117,11 +117,11 @@ but modifications can be made to the XML file in the assets folder
 (or by changing the path to a modified XML file in another folder)..
 
 ```
-env = gymnasium.make('Reacher-v4')
+env = gym.make('Reacher-v4')
 ```
 
 There is no v3 for Reacher, unlike the robot environments where a v3 and
-beyond take gymnasium.make kwargs such as xml_file, ctrl_cost_weight, reset_noise_scale etc.
+beyond take gym.make kwargs such as xml_file, ctrl_cost_weight, reset_noise_scale etc.
 
 
 ### Version History

@@ -18,7 +18,7 @@ This environment is part of the <a href='..'>Mujoco environments</a>. Please rea
 | Observation Shape | (376,) |
 | Observation High | [inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf  inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf  inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf  inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf  inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf  inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf  inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf  inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf  inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf  inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf  inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf  inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf  inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf  inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf  inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf  inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf  inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf  inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf  inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf  inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf  inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf inf] |
 | Observation Low | [-inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf  -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf  -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf  -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf  -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf  -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf  -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf  -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf  -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf  -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf  -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf  -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf  -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf  -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf  -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf  -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf  -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf  -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf  -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf  -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf  -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf  -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf  -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf  -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf  -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf  -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf  -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf] |
-| Import | `gymnasium.make("HumanoidStandup-v4")` | 
+| Import | `gym.make("HumanoidStandup-v4")` | 
 
 
 ### Description
@@ -176,17 +176,17 @@ The episode ends when any of the following happens:
 No additional arguments are currently supported.
 
 ```
-env = gymnasium.make('HumanoidStandup-v4')
+env = gym.make('HumanoidStandup-v4')
 ```
 
 There is no v3 for HumanoidStandup, unlike the robot environments where a v3 and
-beyond take gymnasium.make kwargs such as xml_file, ctrl_cost_weight, reset_noise_scale etc.
+beyond take gym.make kwargs such as xml_file, ctrl_cost_weight, reset_noise_scale etc.
 
 
 ### Version History
 
 * v4: all mujoco environments now use the mujoco bindings in mujoco>=2.1.3
-* v3: support for gymnasium.make kwargs such as xml_file, ctrl_cost_weight, reset_noise_scale etc. rgb rendering comes from tracking camera (so agent does not run away from screen)
+* v3: support for gym.make kwargs such as xml_file, ctrl_cost_weight, reset_noise_scale etc. rgb rendering comes from tracking camera (so agent does not run away from screen)
 * v2: All continuous control environments now use mujoco_py >= 1.50
 * v1: max_time_steps raised to 1000 for robot based tasks. Added reward_threshold to environments.
 * v0: Initial versions release (1.0.0)
