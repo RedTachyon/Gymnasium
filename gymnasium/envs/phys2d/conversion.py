@@ -1,5 +1,6 @@
 from typing import Any, Dict, Optional, Tuple
 
+import jax
 import jax.numpy as jnp
 import jax.random as jrng
 import numpy as np
@@ -9,11 +10,12 @@ from gymnasium import Space
 from gymnasium.envs.registration import EnvSpec
 from gymnasium.functional import ActType, FuncEnv, StateType
 from gymnasium.utils import seeding
+from gymnasium.vector.utils import batch_space
 
 
 class JaxEnv(gym.Env):
     """
-    A conversion layer for numpy-based environments.
+    A conversion layer for jax-based environments.
     """
 
     state: StateType
@@ -73,13 +75,14 @@ class JaxEnv(gym.Env):
             action = np.clip(action, self.action_space.low, self.action_space.high)
         else:  # Discrete
             # For now we assume jax envs don't use complex spaces
-            err_msg = f"{action!r} ({type(action)}) invalid"
-            assert self.action_space.contains(action), err_msg
+            assert self.action_space.contains(
+                action
+            ), f"{action!r} ({type(action)}) invalid"
 
         rng, self.rng = jrng.split(self.rng)
 
         next_state = self.func_env.transition(self.state, action, rng)
-        observation = self.func_env.observation(self.state)
+        observation = self.func_env.observation(next_state)
         reward = self.func_env.reward(self.state, action, next_state)
         terminated = self.func_env.terminal(next_state)
         info = self.func_env.step_info(self.state, action, next_state)
@@ -88,6 +91,126 @@ class JaxEnv(gym.Env):
         observation = _convert_jax_to_numpy(observation)
 
         return observation, float(reward), bool(terminated), False, info
+
+    def render(self):
+        if self.render_mode == "rgb_array":
+            self.render_state, image = self.func_env.render_image(
+                self.state, self.render_state
+            )
+            return image
+        else:
+            raise NotImplementedError
+
+    def close(self):
+        if self.render_state is not None:
+            self.func_env.render_close(self.render_state)
+            self.render_state = None
+
+
+class JaxVectorEnv(gym.VectorEnv):
+    """
+    A vector env implementation for functional Jax envs
+    """
+
+    state: StateType
+    rng: jrng.PRNGKey
+
+    def __init__(
+        self,
+        func_env: FuncEnv,
+        num_envs: int,
+        observation_space: Space,
+        action_space: Space,
+        time_limit: int = 0,
+        metadata: Optional[Dict[str, Any]] = None,
+        render_mode: Optional[str] = None,
+        reward_range: Tuple[float, float] = (-float("inf"), float("inf")),
+        spec: Optional[EnvSpec] = None,
+    ):
+        """Initialize the environment from a FuncEnv."""
+        super().__init__()
+        if metadata is None:
+            metadata = {}
+        self.func_env = func_env
+        self.num_envs = num_envs
+        self.observation_space = batch_space(observation_space, self.num_envs)
+        self.action_space = batch_space(action_space, self.num_envs)
+        self.metadata = metadata
+        self.render_mode = render_mode
+        self.reward_range = reward_range
+        self.spec = spec
+        self.time_limit = time_limit
+
+        self.steps = jnp.zeros(self.num_envs, dtype=jnp.int32)
+
+        self._is_box_action_space = isinstance(self.action_space, gym.spaces.Box)
+
+        if self.render_mode == "rgb_array":
+            self.render_state = self.func_env.render_init()
+        else:
+            self.render_state = None
+
+        np_random, _ = seeding.np_random()
+        seed = np_random.integers(0, 2**32 - 1, dtype="uint32")
+
+        self.rng = jrng.PRNGKey(seed)
+
+        self.func_env.transform(jax.vmap)
+
+    def reset(self, *, seed: Optional[int] = None, options: Optional[dict] = None):
+        super().reset(seed=seed)
+        if seed is not None:
+            self.rng = jrng.PRNGKey(seed)
+
+        rng, self.rng = jrng.split(self.rng)
+
+        multi_rng = jrng.split(rng, self.num_envs)
+
+        self.state = self.func_env.initial(rng=multi_rng)
+        obs = self.func_env.observation(self.state)
+        info = self.func_env.state_info(self.state)
+
+        self.steps = jnp.zeros(self.num_envs, dtype=jnp.int32)
+
+        obs = _convert_jax_to_numpy(obs)
+
+        return obs, info
+
+    def step(self, action: ActType):
+        if self._is_box_action_space:
+            assert isinstance(self.action_space, gym.spaces.Box)  # For typing
+            action = np.clip(action, self.action_space.low, self.action_space.high)
+        else:  # Discrete
+            # For now we assume jax envs don't use complex spaces
+            assert self.action_space.contains(
+                action
+            ), f"{action!r} ({type(action)}) invalid"
+
+        rng, self.rng = jrng.split(self.rng)
+
+        next_state = self.func_env.transition(self.state, action, rng)
+        observation = self.func_env.observation(next_state)
+        reward = self.func_env.reward(self.state, action, next_state)
+        terminated = self.func_env.terminal(next_state)
+
+        self.steps += 1
+
+        truncated = jnp.zeros_like(terminated)
+        info = self.func_env.step_info(self.state, action, next_state)
+        self.state = next_state
+
+        done = jnp.logical_or(terminated, truncated)
+        # TODO: handle reset
+        if jnp.any(done):
+            # This code was generated by copilot, need to check if it works
+            self.state[:, done] = self.np_random.uniform(
+                low=self.low, high=self.high, size=(4, done.sum())
+            ).astype(np.float32)
+            self.steps[done] = 0
+
+        observation = _convert_jax_to_numpy(observation)
+
+        return observation, reward, terminated, truncated, info
 
     def render(self):
         if self.render_mode == "rgb_array":

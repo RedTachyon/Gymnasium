@@ -10,7 +10,7 @@ import numpy as np
 from jax.random import PRNGKey
 
 import gymnasium as gym
-from gymnasium.envs.phys2d.conversion import JaxEnv
+from gymnasium.envs.phys2d.conversion import JaxEnv, JaxVectorEnv
 from gymnasium.error import DependencyNotInstalled
 from gymnasium.functional import ActType, FuncEnv, StateType
 from gymnasium.utils import EzPickle
@@ -245,6 +245,28 @@ class CartPoleJaxEnv(JaxEnv, EzPickle):
         metadata = {"render_modes": ["rgb_array"], "render_fps": 50}
         super().__init__(
             env,
+            observation_space=observation_space,
+            action_space=action_space,
+            metadata=metadata,
+            render_mode=render_mode,
+        )
+
+
+class CartPoleJaxVectorEnv(JaxVectorEnv, EzPickle):
+
+    metadata = {"render_modes": ["rgb_array"], "render_fps": 50}
+
+    def __init__(self, num_envs: int = 2, render_mode: Optional[str] = None, **kwargs):
+        EzPickle.__init__(self, render_mode=render_mode, **kwargs)
+        env = CartPoleF(**kwargs)
+        env.transform(jax.jit)
+        action_space = env.action_space
+        observation_space = env.observation_space
+        metadata = {"render_modes": ["rgb_array"], "render_fps": 50}
+
+        super().__init__(
+            env,
+            num_envs=num_envs,
             observation_space=observation_space,
             action_space=action_space,
             metadata=metadata,
