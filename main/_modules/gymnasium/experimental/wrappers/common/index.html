@@ -287,13 +287,13 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../../../environments/mujoco/ant/">Ant</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../../environments/mujoco/half_cheetah/">Half Cheetah</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../../environments/mujoco/hopper/">Hopper</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../../environments/mujoco/humanoid_standup/">Humanoid Standup</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../../environments/mujoco/humanoid/">Humanoid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../environments/mujoco/humanoid_standup/">Humanoid Standup</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../../environments/mujoco/inverted_double_pendulum/">Inverted Double Pendulum</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../../environments/mujoco/inverted_pendulum/">Inverted Pendulum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../environments/mujoco/pusher/">Pusher</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../../environments/mujoco/reacher/">Reacher</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../../environments/mujoco/swimmer/">Swimmer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../../environments/mujoco/pusher/">Pusher</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../../environments/mujoco/walker2d/">Walker2D</a></li>
 </ul>
 </li>
@@ -562,11 +562,11 @@
 
         <span class="k">assert</span> <span class="nb">hasattr</span><span class="p">(</span>
             <span class="n">env</span><span class="p">,</span> <span class="s2">&quot;action_space&quot;</span>
-        <span class="p">),</span> <span class="s2">&quot;The environment must specify an action space. https://gymnasium.farama.org/content/environment_creation/&quot;</span>
+        <span class="p">),</span> <span class="s2">&quot;The environment must specify an action space. https://gymnasium.farama.org/tutorials/gymnasium_basics/environment_creation/&quot;</span>
         <span class="n">check_action_space</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="p">)</span>
         <span class="k">assert</span> <span class="nb">hasattr</span><span class="p">(</span>
             <span class="n">env</span><span class="p">,</span> <span class="s2">&quot;observation_space&quot;</span>
-        <span class="p">),</span> <span class="s2">&quot;The environment must specify an observation space. https://gymnasium.farama.org/content/environment_creation/&quot;</span>
+        <span class="p">),</span> <span class="s2">&quot;The environment must specify an observation space. https://gymnasium.farama.org/tutorials/gymnasium_basics/environment_creation/&quot;</span>
         <span class="n">check_observation_space</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">observation_space</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_checked_reset</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
@@ -796,7 +796,7 @@
           <div class="bottom-of-page">
             <div class="left-details">
               <div class="copyright">
-                Copyright &#169; 2022 Farama Foundation
+                Copyright &#169; 2023 Farama Foundation
               </div>
               <!--
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
