@@ -20,7 +20,7 @@ RenderStateType = Tuple["pygame.Surface", "pygame.time.Clock", Optional[float]] 
 
 
 class PendulumFunctional(
-    FuncEnv[jax.Array, jax.Array, int, float, bool, RenderStateType]
+    #FuncEnv[jax.Array, jax.Array, int, float, bool, RenderStateType]
 ):
     """Pendulum but in jax and functional structure."""
 
