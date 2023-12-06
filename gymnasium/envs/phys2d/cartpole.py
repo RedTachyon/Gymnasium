@@ -1,14 +1,13 @@
 """Implementation of a Jax-accelerated cartpole environment."""
 from __future__ import annotations
 
-from dataclasses import dataclass
 from typing import Any, Tuple
 
 import jax
 import jax.numpy as jnp
 import numpy as np
-from jax.random import PRNGKey
 from flax import struct
+from jax.random import PRNGKey
 
 import gymnasium as gym
 from gymnasium.error import DependencyNotInstalled
@@ -19,8 +18,11 @@ from gymnasium.utils.functional_jax_env import FunctionalJaxEnv, FunctionalJaxVe
 
 RenderStateType = Tuple["pygame.Surface", "pygame.time.Clock"]  # type: ignore  # noqa: F821
 
+
 @struct.dataclass
 class CartPoleParams:
+    """Parameters for the jax CartPole environment."""
+
     gravity: float = 9.8
     masscart: float = 1.0
     masspole: float = 0.1
@@ -104,14 +106,18 @@ class CartPoleFunctional(
     observation_space = gym.spaces.Box(-np.inf, np.inf, shape=(4,), dtype=np.float32)
     action_space = gym.spaces.Discrete(2)
 
-    def initial(self, rng: PRNGKey, params: CartPoleParams | None = CartPoleParams):
+    def initial(self, rng: PRNGKey, params: CartPoleParams = CartPoleParams):
         """Initial state generation."""
         return jax.random.uniform(
             key=rng, minval=-params.x_init, maxval=params.x_init, shape=(4,)
         )
 
     def transition(
-        self, state: jax.Array, action: int | jax.Array, rng: None = None, params: CartPoleParams | None = CartPoleParams
+        self,
+        state: jax.Array,
+        action: int | jax.Array,
+        rng: None = None,
+        params: CartPoleParams = CartPoleParams,
     ) -> StateType:
         """Cartpole transition."""
         x, x_dot, theta, theta_dot = state
@@ -125,7 +131,8 @@ class CartPoleFunctional(
             force + params.polemass_length * theta_dot**2 * sintheta
         ) / params.total_mass
         thetaacc = (params.gravity * sintheta - costheta * temp) / (
-            params.length * (4.0 / 3.0 - params.masspole * costheta**2 / params.total_mass)
+            params.length
+            * (4.0 / 3.0 - params.masspole * costheta**2 / params.total_mass)
         )
         xacc = temp - params.polemass_length * thetaacc * costheta / params.total_mass
 
@@ -138,11 +145,15 @@ class CartPoleFunctional(
 
         return state
 
-    def observation(self, state: jax.Array, params: CartPoleParams | None = CartPoleParams) -> jax.Array:
+    def observation(
+        self, state: jax.Array, params: CartPoleParams = CartPoleParams
+    ) -> jax.Array:
         """Cartpole observation."""
         return state
 
-    def terminal(self, state: jax.Array, params: CartPoleParams | None = CartPoleParams) -> jax.Array:
+    def terminal(
+        self, state: jax.Array, params: CartPoleParams = CartPoleParams
+    ) -> jax.Array:
         """Checks if the state is terminal."""
         x, _, theta, _ = state
 
@@ -156,7 +167,11 @@ class CartPoleFunctional(
         return terminated
 
     def reward(
-        self, state: StateType, action: ActType, next_state: StateType, params: CartPoleParams | None = CartPoleParams
+        self,
+        state: StateType,
+        action: ActType,
+        next_state: StateType,
+        params: CartPoleParams = CartPoleParams,
     ) -> jax.Array:
         """Computes the reward for the state transition using the action."""
         x, _, theta, _ = state
@@ -175,7 +190,7 @@ class CartPoleFunctional(
         self,
         state: StateType,
         render_state: RenderStateType,
-        params: CartPoleParams | None = CartPoleParams,
+        params: CartPoleParams = CartPoleParams,
     ) -> tuple[RenderStateType, np.ndarray]:
         """Renders an image of the state using the render state."""
         try:

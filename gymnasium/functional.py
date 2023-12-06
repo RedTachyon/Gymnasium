@@ -18,7 +18,9 @@ Params = TypeVar("Params")
 
 
 class FuncEnv(
-    Generic[StateType, ObsType, ActType, RewardType, TerminalType, RenderStateType, Params]
+    Generic[
+        StateType, ObsType, ActType, RewardType, TerminalType, RenderStateType, Params
+    ]
 ):
     """Base class (template) for functional envs.
 
@@ -53,7 +55,9 @@ class FuncEnv(
         """Generates the initial state of the environment with a random number generator."""
         raise NotImplementedError
 
-    def transition(self, state: StateType, action: ActType, rng: Any, params: Params | None = None) -> StateType:
+    def transition(
+        self, state: StateType, action: ActType, rng: Any, params: Params | None = None
+    ) -> StateType:
         """Updates (transitions) the state with an action and random number generator."""
         raise NotImplementedError
 
@@ -62,7 +66,11 @@ class FuncEnv(
         raise NotImplementedError
 
     def reward(
-        self, state: StateType, action: ActType, next_state: StateType, params: Params | None = None
+        self,
+        state: StateType,
+        action: ActType,
+        next_state: StateType,
+        params: Params | None = None,
     ) -> RewardType:
         """Computes the reward for a given transition between `state`, `action` to `next_state`."""
         raise NotImplementedError
@@ -76,7 +84,11 @@ class FuncEnv(
         return {}
 
     def transition_info(
-        self, state: StateType, action: ActType, next_state: StateType, params: Params | None = None
+        self,
+        state: StateType,
+        action: ActType,
+        next_state: StateType,
+        params: Params | None = None,
     ) -> dict:
         """Info dict about a full transition."""
         return {}
@@ -92,7 +104,10 @@ class FuncEnv(
         self.step_info = func(self.transition_info)
 
     def render_image(
-        self, state: StateType, render_state: RenderStateType, params: Params | None = None
+        self,
+        state: StateType,
+        render_state: RenderStateType,
+        params: Params | None = None,
     ) -> tuple[RenderStateType, np.ndarray]:
         """Show the state."""
         raise NotImplementedError
